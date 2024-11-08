@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"    #portul 5000 din container -> portul 5000 local
+    depends_on:
+      - db    #pornire baza de date inaintea aplicatiei web
+  db:
+    image: postgres    #foloseste imaginea PostgreSQL din Docker Hub
+    environment:
+      POSTGRES_USER: titusbiluta
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data    #stocheaza datele pe volumul db_data
+volumes:
+  db_data:    #definim volumul db_data
