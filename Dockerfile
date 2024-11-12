@@ -1,15 +1,20 @@
-#2. build
-FROM python:3.10.12
+FROM python:3.10.12 as builder
 
-#seteaza director de lucru în container
 WORKDIR /app
 
-#copiaza fisierele aplicatiei în container
-COPY . /app
+COPY requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+RUN rm requirements.txt
+
+FROM builder
+
+WORKDIR /app
+
+COPY --from=builder /app /app
 
 EXPOSE 5000
 
-#rulează aplicatia
 CMD ["python", "webapp.py"]
